@@ -1,65 +1,40 @@
 """ A Python Class
-A simple Python graph class, demonstrating the essential 
-facts and functionalities of graphs.
+A simple Python graph class to do essential operations into graph.
 """
+from random import choice
 
-class Graph(object):
+class Graph():
 
-    def __init__(self, graph_dict=None):
-        """ initializes a graph object 
-            If no dictionary or None is given, 
-            an empty dictionary will be used
+    def __init__(self, graph):
+        """ Initializes util object.
         """
-        if graph_dict == None:
-            graph_dict = {}
-        self.__graph_dict = graph_dict
+        self.__graph = graph
 
-    def vertices(self):
-        """ returns the vertices of a graph """
-        return list(self.__graph_dict.keys())
-
-    def edges(self):
-        """ returns the edges of a graph """
-        return self.__generate_edges()
-
-    def add_vertex(self, vertex):
-        """ If the vertex "vertex" is not in 
-            self.__graph_dict, a key "vertex" with an empty
-            list as a value is added to the dictionary. 
-            Otherwise nothing has to be done. 
+    def set_graph(self, graph):
+        """ A method to set graph.
         """
-        if vertex not in self.__graph_dict:
-            self.__graph_dict[vertex] = []
+        self.__graph = graph
 
-    def add_edge(self, edge):
-        """ assumes that edge is of type set, tuple or list; 
-            between two vertices can be multiple edges! 
+    def get_graph(self):
+        """ A method to get graph.
         """
-        edge = set(edge)
-        (vertex1, vertex2) = tuple(edge)
-        if vertex1 in self.__graph_dict:
-            self.__graph_dict[vertex1].append(vertex2)
-        else:
-            self.__graph_dict[vertex1] = [vertex2]
+        return self.__graph
 
-    def __generate_edges(self):
-        """ A static method generating the edges of the 
-            graph "graph". Edges are represented as sets 
-            with one (a loop back to the vertex) or two 
-            vertices 
+    def random_walk(self):
+        """ A method to get started a random walk into graph
+         selecting a node from random.
         """
-        edges = []
-        for vertex in self.__graph_dict:
-            for neighbour in self.__graph_dict[vertex]:
-                if {neighbour, vertex} not in edges:
-                    edges.append({vertex, neighbour})
-        return edges
+        print 'Number of nodes', self.__graph.number_of_nodes()
+        print 'Number of edges', self.__graph.number_of_edges()
 
-    def __str__(self):
-        res = "vertices: "
-        for k in self.__graph_dict:
-            res += str(k) + " "
-        res += "\nedges: "
-        for edge in self.__generate_edges():
-            res += str(edge) + " "
-        return res
+        # Get a node randomly
+        # Probability to get this first node is 1/N
+        seed = choice(self.__graph.nodes())
+        print 'Selected a node randomly', seed
+        print 'Degree', self.__graph.degree(seed)
+        print 'In degree', self.__graph.in_degree(seed)
+        print 'Out degree', self.__graph.out_degree(seed)
+        print 'Successors', self.__graph.successors(seed)
+
+        # Print edges with relation
+        # print DG.edges(data='relation')
