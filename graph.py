@@ -35,6 +35,17 @@ class Graph():
         print 'In degree', self.__graph.in_degree(seed)
         print 'Out degree', self.__graph.out_degree(seed)
         print 'Successors', self.__graph.successors(seed)
+        num_edges = len(self.__graph.edges())
+
+        for possibility in self.__graph.nodes():
+            if possibility != seed:
+                if possibility not in self.__graph.successors(seed):
+                    print(possibility, ' is not a sucessor')
+                    prod = 1.0
+                    print 'Degree', self.__graph.degree(possibility)
+                    for i in range(self.__graph.degree(possibility)):
+                        prod = prod * ((num_edges-self.__graph.degree(seed)+(-i+1)+1)/float(num_edges+(-i+1)+1))
+                    print('Probability to have a connection', 1 - prod)
 
         # Print edges with relation
         # print DG.edges(data='relation')
