@@ -1,6 +1,8 @@
 """ A Python Class
 A simple Python graph class to do essential operations into graph.
 """
+import operator
+import math
 from random import choice
 
 class Graph():
@@ -36,16 +38,19 @@ class Graph():
         print 'Out degree', self.__graph.out_degree(seed)
         print 'Successors', self.__graph.successors(seed)
         num_edges = len(self.__graph.edges())
-
+        prob_vertex = {}
+        entropy_vertex = {}
         for possibility in self.__graph.nodes():
             if possibility != seed:
                 if possibility not in self.__graph.successors(seed):
-                    print(possibility, ' is not a sucessor')
                     prod = 1.0
-                    print 'Degree', self.__graph.degree(possibility)
                     for i in range(self.__graph.degree(possibility)):
                         prod = prod * ((num_edges-self.__graph.degree(seed)+(-i+1)+1)/float(num_edges+(-i+1)+1))
-                    print('Probability to have a connection', 1 - prod)
-
+                    prob_vertex[possibility] = 1 - prod
+                    entropy_vertex[possibility] = -math.log(1 - prod)
+        prob_vertex = sorted(prob_vertex.items(), key=operator.itemgetter(1))
+        entropy_vertex = sorted(entropy_vertex.items(), key=operator.itemgetter(1))
+        print entropy_vertex
+        print seed
         # Print edges with relation
         # print DG.edges(data='relation')
