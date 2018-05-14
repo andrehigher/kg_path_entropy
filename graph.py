@@ -4,6 +4,7 @@ A simple Python graph class to do essential operations into graph.
 import operator
 import math
 from random import choice
+import networkx as nx
 
 class Graph():
 
@@ -21,6 +22,24 @@ class Graph():
         """ A method to get graph.
         """
         return self.__graph
+
+    def calculate_entropy(self, source, target):
+        """ Calculates the entropy from source and target.
+        """
+        prod = 1.0
+        for i in range(1, self.__graph.degree(target)+1):
+            prod = prod * (float(self.__graph.number_of_edges()-self.__graph.degree(source)-i+1)/float(self.__graph.number_of_edges()-i+1))
+        return -math.log(1 - prod, 2)
+
+    def calculate_common_neighbors(self, source, target):
+        """ Calculates the common neighbors from source and target.
+        """
+        return sorted(nx.common_neighbors(self.__graph, source, target))
+
+    def calculate_resource_allocation(self, source, target):
+        """ Calculates the common neighbors from source and target.
+        """
+        return nx.resource_allocation_index(self.__graph, [(source, target)])
 
     def random_walk(self):
         """ A method to get started a random walk into graph
@@ -54,3 +73,9 @@ class Graph():
         print seed
         # Print edges with relation
         # print DG.edges(data='relation')
+
+    def entropy(self, source, target):
+        """ A method to get started entropy calculation into graph
+         selecting a node.
+        """
+        print('source:', source, 'target:', target, 'entropy:', self.calculate_entropy(source, target))

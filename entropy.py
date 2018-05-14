@@ -50,21 +50,16 @@ if __name__ == "__main__":
     #     paths = nx.all_simple_paths(G, 0, node, cutoff=3)
     #     print(list(paths))
 
-    paths = nx.all_simple_paths(G, 0, 3, cutoff=3)
+    # for j in range(0, 9):
+    paths = nx.all_simple_paths(G, 8, 0, cutoff=3)
     path_entropy_all = 0
     for path in list(paths):
         path_entropy = 0
         for i in range(0, len(path)-1):
             path_entropy = path_entropy + calculate_entropy(G, path[i], path[i+1])
         path_entropy_all = path_entropy_all + path_entropy*(1/(float((len(path)-1)-1)))
-    print 'entropy path 0 -> 3 - ', path_entropy_all-calculate_entropy(G, 0, 3)
-
-    paths = nx.all_simple_paths(G, 0, 2, cutoff=3)
-    path_entropy_all = 0
-    for path in list(paths):
-        path_entropy = 0
-        for i in range(0, len(path)-1):
-            path_entropy = path_entropy + calculate_entropy(G, path[i], path[i+1])
-        path_entropy_all = path_entropy_all + path_entropy*(1/(float((len(path)-1)-1)))
-    print 'entropy path 0 -> 2 - ', path_entropy_all-calculate_entropy(G, 0, 2)
+            
+    print 'entropy path 8 -> ', 0,' - ', path_entropy_all-calculate_entropy(G, 8, 0)
+    
+    
         
