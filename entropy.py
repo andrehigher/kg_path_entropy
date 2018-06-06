@@ -35,10 +35,10 @@ if __name__ == "__main__":
     G.add_edge(0,4)
     G.add_edge(1,2)
     G.add_edge(1,3)
-    G.add_edge(4,5)
+    # G.add_edge(4,5)
     G.add_edge(5,6)
     G.add_edge(5,3)
-    G.add_edge(7,8)
+    # G.add_edge(7,8)
     G.add_edge(8,9)
     num_edges = len(G.edges())
 
@@ -50,16 +50,25 @@ if __name__ == "__main__":
     #     paths = nx.all_simple_paths(G, 0, node, cutoff=3)
     #     print(list(paths))
 
-    # for j in range(0, 9):
-    paths = nx.all_simple_paths(G, 8, 0, cutoff=3)
-    path_entropy_all = 0
-    for path in list(paths):
-        path_entropy = 0
-        for i in range(0, len(path)-1):
-            path_entropy = path_entropy + calculate_entropy(G, path[i], path[i+1])
-        path_entropy_all = path_entropy_all + path_entropy*(1/(float((len(path)-1)-1)))
-            
-    print 'entropy path 8 -> ', 0,' - ', path_entropy_all-calculate_entropy(G, 8, 0)
+    for j in range(0, 10):
+        print j
+        for i in range(j + 1, 10):
+            paths = nx.all_simple_paths(G, j, i, cutoff=7)
+            path_entropy_all = 0
+            for path in list(paths):
+                path_entropy = 0
+                for k in range(0, len(path)-1):
+                    try:
+                        path_entropy = path_entropy + calculate_entropy(G, path[k], path[k+1])
+                    except ZeroDivisionError:
+                        path_entropy = 0
+                try:
+                    path_entropy_all = path_entropy_all + path_entropy*(1/(float((len(path)-1)-1)))
+                except ZeroDivisionError:
+                    path_entropy_all = 0
+                
+                    
+            print path_entropy_all-calculate_entropy(G, j, i)
     
     
         

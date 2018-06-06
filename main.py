@@ -6,8 +6,8 @@ from graph import Graph
 
 if __name__ == "__main__":
     # print sys.argv
-    DG=nx.DiGraph()
+    DG = nx.DiGraph()
     util = Util()
     graph = Graph(DG)
     util.read_file('dataset/fb15k/train.txt', graph)
-    graph.random_walk()
+    # graph.random_walk()
