@@ -79,3 +79,29 @@ class Graph():
          selecting a node.
         """
         print('source:', source, 'target:', target, 'entropy:', self.calculate_entropy(source, target))
+
+    def predict_facts(self, source, target, length):
+        """ A method to predict facts based on shannon entropy.
+        """
+        print(source, target)
+        print 'Selected a node', source
+        print 'Source Degree', self.__graph.degree(source)
+        print 'Neighbors', self.__graph.neighbors(source)
+        print 'Target Degree', self.__graph.degree(target)
+        print 'Neighbors', self.__graph.neighbors(target)
+
+        
+        # print(sorted(nx.all_neighbors(self.__graph, source)))
+        print(len(self.__graph.edges()))
+        # print(self.__graph.edges())
+        count = 0.0
+        for edge in self.__graph.edges():
+            if edge[0] == 'teamplayssport' or edge[1] == 'teamplayssport':
+                count = count + 1
+            # print(edge)
+        # print 'In degree', self.__graph.in_degree(source)
+        # print 'Out degree', self.__graph.out_degree(source)
+        # print 'Successors', self.__graph.successors(source)
+        # print(sorted(nx.common_neighbors(self.__graph, source, target)))
+        print(count)
+        print(count/(len(self.__graph.edges())))
