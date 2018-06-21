@@ -4,6 +4,7 @@ A simple Python graph class to do essential operations into graph.
 import operator
 import math
 from random import choice
+from collections import defaultdict
 import networkx as nx
 
 class Graph():
@@ -12,6 +13,8 @@ class Graph():
         """ Initializes util object.
         """
         self.__graph = graph
+        self.__relations = {}
+        self.__relations_distribution = defaultdict(int)
 
     def set_graph(self, graph):
         """ A method to set graph.
@@ -22,6 +25,63 @@ class Graph():
         """ A method to get graph.
         """
         return self.__graph
+
+    def set_relation(self, source, target, relation):
+        """ A method to set an edge label.
+        """
+        self.__relations[(source,target)] = relation
+
+    def get_relation(self, source, target):
+        """ A method to return an edge label.
+        """
+        try:
+            return self.__relations[(source,target)]
+        except KeyError:
+            try:
+                return self.__relations[(target,source)]
+            except KeyError:
+                pass
+    
+    def generate_distribution(self, source, target, length):
+        """ Generate relations distribution from a source to target.
+        """
+        paths = nx.all_simple_paths(self.__graph, source, target, cutoff=length)
+        paths = list(paths)
+        distribution = defaultdict(int)
+        for path in paths:
+            relations_list = list()
+            for i in range(0, len(path) - 1):
+                relations_list.append(self.get_relation(path[i], path[i+1]))
+            distribution[tuple(relations_list)] += 1
+        return distribution
+
+    def generate_edges_between_paths(self, distribution):
+        """ Generate dictionary from exists edges between v1 and v2.
+        """
+        path_distribution = {}
+        g = self.get_graph()
+        for key, value in distribution.iteritems():
+            print '-------- Calculating: ', key,'---------'
+            dicti = defaultdict(int)
+            for edge in g.edges():
+                try:
+                    if key[0] == self.get_relation(edge[0], edge[1]):
+                        if len(key) > 1:
+                            for neighbor in g.neighbors(edge[1]):
+                                if key[1] == self.get_relation(edge[1], neighbor):
+                                    if len(key) > 2:
+                                        for neighbor2 in g.neighbors(neighbor):
+                                            if key[2] == self.get_relation(neighbor, neighbor2):
+                                                dicti[self.get_relation(edge[0], neighbor2)] += 1
+                                    else:
+                                        dicti[self.get_relation(edge[1], neighbor)] += 1
+                        else:
+                            dicti[self.get_relation(edge[0], edge[1])] += 1
+                except IndexError:
+                    pass
+            path_distribution[key] = dicti
+        return path_distribution
+        
 
     def calculate_entropy(self, source, target):
         """ Calculates the entropy from source and target.
