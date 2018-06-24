@@ -16,6 +16,11 @@ class Graph():
         self.__relations = {}
         self.__relations_distribution = defaultdict(int)
 
+    def clear(self):
+        """ Clear current graph
+        """
+        self.__graph.clear()
+
     def set_graph(self, graph):
         """ A method to set graph.
         """
@@ -41,6 +46,19 @@ class Graph():
                 return self.__relations[(target,source)]
             except KeyError:
                 pass
+
+    def get_domain(self, source):
+        """ Get domain from outgoings relations from source vertex.
+        """
+        try:
+            dicti = defaultdict(int)
+            for neighbor in self.__graph.neighbors(source):
+                relation = self.get_relation(source, neighbor).split('/')
+                dicti[relation[1]] += 1
+            sorted_dicti = sorted(dicti.items(), key=operator.itemgetter(1))
+            return sorted_dicti[0][0]
+        except IndexError:
+            pass
     
     def generate_distribution(self, source, target, length):
         """ Generate relations distribution from a source to target.
@@ -86,6 +104,25 @@ class Graph():
                     pass
             path_distribution[key] = dicti
         return path_distribution
+
+    def generate_final_distribution(self, distribution, distribution_path):
+        """ Generate final distribution from possible edges.
+        """
+        total_edges = float(sum(distribution.values()))
+        final_path_distribution = defaultdict(float)
+        for dist in distribution:
+            final_path_distribution[dist] += float(distribution[dist])/total_edges
+        
+        final_distribution = defaultdict(float)
+        for path in distribution_path:
+            temp_total = 0
+            for path2 in distribution_path[path]:
+                temp_total += distribution_path[path][path2]
+            
+            for path2 in distribution_path[path]:
+                final_distribution[path2] += (float(distribution_path[path][path2])/temp_total)*final_path_distribution[path]
+
+        return final_distribution
         
 
     def calculate_entropy(self, source, target):
