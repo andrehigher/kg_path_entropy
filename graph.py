@@ -93,7 +93,12 @@ class Graph():
                                                 if len(key) > 3:
                                                     for neighbor3 in g.neighbors(neighbor2):
                                                          if key[3] == self.get_relation(neighbor2, neighbor3):
-                                                             dicti[self.get_relation(edge[0], neighbor3)] += 1
+                                                            if len(key) > 4:
+                                                                 for neighbor4 in g.neighbors(neighbor3):
+                                                                    if key[4] == self.get_relation(neighbor3, neighbor4):
+                                                                        dicti[self.get_relation(edge[0], neighbor4)] += 1
+                                                            else:
+                                                                dicti[self.get_relation(edge[0], neighbor3)] += 1
                                                 else:
                                                     dicti[self.get_relation(edge[0], neighbor2)] += 1
                                     else:
